@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import styled from "styled-components/native";
 
-export default function LibrosMenu() {
+export default function ClientesMenu() {
   const router = useRouter();
 
   return (
@@ -10,23 +10,24 @@ export default function LibrosMenu() {
       <BotonVolver onPress={() => router.back()}>
         <TextoVolver>← Volver</TextoVolver>
       </BotonVolver>
+      
       <Header>
-        <Titulo>Libros</Titulo>
+        <Titulo>Clientes</Titulo>
       </Header>
 
       <Content>
         <BotonPrimario
-          onPress={() => router.push("/libros/registrar")}
+          onPress={() => router.push("/clientes/registrar")}
           activeOpacity={0.8}
         >
-          <TextoBoton>+ Registrar Libro</TextoBoton>
+          <TextoBoton>+ Registrar Cliente</TextoBoton>
         </BotonPrimario>
 
         <BotonPrimario
-          onPress={() => router.push("/libros/consultar")}
+          onPress={() => router.push("/clientes/consultar")}
           activeOpacity={0.8}
         >
-          <TextoBoton>Consultar Libros</TextoBoton>
+          <TextoBoton>Consultar Clientes</TextoBoton>
         </BotonPrimario>
       </Content>
     </Container>

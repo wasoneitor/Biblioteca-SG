@@ -17,7 +17,7 @@ export default function Home() {
     <Container>
       <Titulo>Biblioteca SG</Titulo>
 
-      <Boton onPress={() => proximamente("Clientes")} activeOpacity={0.8}>
+      <Boton onPress={() => router.push("/clientes")} activeOpacity={0.8}>
         <Ionicons name="people" size={26} color="#12314D" />
         <Texto>Clientes</Texto>
       </Boton>
@@ -27,12 +27,9 @@ export default function Home() {
         <Texto>Libros</Texto>
       </Boton>
 
-      <Boton
-        onPress={() => proximamente("Alquiler de Libros")}
-        activeOpacity={0.8}
-      >
-        <Ionicons name="library" size={26} color="#12314D" />
-        <Texto>Alquiler de Libros</Texto>
+      <Boton onPress={() => router.push("/alquileres")} activeOpacity={0.8}>
+        <Ionicons name="people" size={26} color="#12314D" />
+        <Texto>Alquileres</Texto>
       </Boton>
     </Container>
   );

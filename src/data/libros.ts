@@ -98,3 +98,18 @@ export function addLibro(nuevo: Omit<Libro, "id">): Libro {
   libros.push(libro);
   return libro;
 }
+export function prestarLibro(id: string): boolean {
+  const libro = libros.find((libro) => libro.id === id);
+
+  if (!libro || libro.copias <= 0 || libro.estado !== "Disponible") {
+    return false;
+  }
+
+  libro.copias -= 1;
+
+  if (libro.copias === 0) {
+    libro.estado = "Prestado";
+  }
+
+  return true;
+}

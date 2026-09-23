@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, ScrollView } from "react-native";
+import { Alert, Platform, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import type { Estado } from "../../data/libros";
 import { addLibro } from "../../data/libros";
@@ -89,25 +89,35 @@ export default function RegistrarLibro() {
       portada: imagen
         ? { uri: imagen }
         : {
-            uri: `https://placehold.co/200x280/2E9AD1/ffffff?text=${encodeURIComponent(
-              titulo.trim().slice(0, 10),
-            )}`,
-          },
+          uri: `https://placehold.co/200x280/2E9AD1/ffffff?text=${encodeURIComponent(
+            titulo.trim().slice(0, 10),
+          )}`,
+        },
     });
 
-    Alert.alert("¡Listo!", "El libro se registró con éxito!", [
-      {
-        text: "Entendido",
-        onPress: () => {
-          limpiarFormulario();
-          router.back();
+    if (Platform.OS === "web") {
+      window.alert("El libro se registró con éxito.");
+      limpiarFormulario();
+      router.back();
+    } else {
+      Alert.alert("¡Listo!", "El libro se registró con éxito.", [
+        {
+          text: "Entendido",
+          onPress: () => {
+            limpiarFormulario();
+            router.back();
+          },
         },
-      },
-    ]);
+      ]);
+    }
   }
 
   return (
     <Container>
+      {/* Botón para volver atrás */}
+      <BotonVolver onPress={() => router.back()}>
+        <TextoVolver>← Volver</TextoVolver>
+      </BotonVolver>
       <Header>
         <Titulo>Registrar Libro</Titulo>
       </Header>
@@ -193,7 +203,20 @@ export default function RegistrarLibro() {
     </Container>
   );
 }
+// Estilos agregados para el botón volver
+const BotonVolver = styled.TouchableOpacity`
+  align-self: flex-start;
+  padding: 8px 12px;
+  background-color: #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+`;
 
+const TextoVolver = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  color: #164e63;
+`;
 const Container = styled.View`
   flex: 1;
   background-color: #f5f8fa;
