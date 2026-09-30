@@ -149,11 +149,6 @@ export default function ListaAlquileres() {
 
   return (
     <Contenedor edges={["top"]}>
-      <Volver onPress={() => router.back()}>
-        <Ionicons name="chevron-back" size={20} color={colores.azul} />
-        <TextoVolver>Inicio</TextoVolver>
-      </Volver>
-
       <Encabezado>
         <Textos>
           <TituloPantalla>Alquileres</TituloPantalla>
