@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import { getAlquileres } from "@/data/alquileres";
-import { getLibros } from "@/data/libros";
+
 
 export default function ConsultarAlquileres() {
   const [alquileres, setAlquileres] = useState<
