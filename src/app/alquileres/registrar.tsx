@@ -1,39 +1,33 @@
-import styled from "styled-components/native";
-import { useCallback, useState } from "react";
-import { useFocusEffect } from "expo-router";
-import { getClientes } from "@/data/cliente";
-import type { Cliente } from "@/data/cliente";
-import { getLibros, prestarLibro } from "@/data/libros";
-import type { Libro } from "@/data/libros";
-import { Alert, Platform } from "react-native";
-import { useRouter } from "expo-router";
 import { addAlquiler } from "@/data/alquileres";
+import type { Libro } from "@/data/libros";
+import { getLibros, prestarLibro } from "@/data/libros";
+import { useClientes } from "@/store/clientes";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
+import { Alert, Platform } from "react-native";
+import styled from "styled-components/native";
 
 export default function Alquileres() {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const clientes = useClientes((s) => s.clientes);
   const [clienteId, setClienteId] = useState<string | null>(null);
   const [libros, setLibros] = useState<Libro[]>([]);
   const [libroId, setLibroId] = useState<string | null>(null);
   const router = useRouter();
   useFocusEffect(
     useCallback(() => {
-      setClientes([...getClientes()]);
       setLibros([...getLibros()]);
-    }, [])
+    }, []),
   );
   function confirmarAlquiler() {
     if (!clienteId || !libroId) {
-  if (Platform.OS === "web") {
-    window.alert("Seleccioná un cliente y un libro.");
-  } else {
-    Alert.alert(
-      "Faltan datos",
-      "Seleccioná un cliente y un libro."
-    );
-  }
+      if (Platform.OS === "web") {
+        window.alert("Seleccioná un cliente y un libro.");
+      } else {
+        Alert.alert("Faltan datos", "Seleccioná un cliente y un libro.");
+      }
 
-  return;
-}
+      return;
+    }
     if (!prestarLibro(libroId)) {
       if (Platform.OS === "web") {
         window.alert("No fue posible prestar el libro.");
@@ -84,8 +78,7 @@ export default function Alquileres() {
             key={cliente.id}
             onPress={() => setClienteId(cliente.id)}
             style={{
-              backgroundColor:
-                clienteId === cliente.id ? "#CDEEFF" : "#FFFFFF",
+              backgroundColor: clienteId === cliente.id ? "#CDEEFF" : "#FFFFFF",
             }}
           >
             <NombreCliente>
@@ -100,16 +93,13 @@ export default function Alquileres() {
       <Subtitulo>Seleccionar libro</Subtitulo>
 
       {libros
-        .filter(
-          (libro) => libro.estado === "Disponible" && libro.copias > 0
-        )
+        .filter((libro) => libro.estado === "Disponible" && libro.copias > 0)
         .map((libro) => (
           <BotonCliente
             key={libro.id}
             onPress={() => setLibroId(libro.id)}
             style={{
-              backgroundColor:
-                libroId === libro.id ? "#CDEEFF" : "#FFFFFF",
+              backgroundColor: libroId === libro.id ? "#CDEEFF" : "#FFFFFF",
             }}
           >
             <NombreCliente>{libro.titulo}</NombreCliente>
@@ -121,9 +111,7 @@ export default function Alquileres() {
         <TextoAccion>Confirmar alquiler</TextoAccion>
       </BotonAccion>
 
-      <BotonAccion
-        onPress={() => router.push("/alquileres/consultar")}
-      >
+      <BotonAccion onPress={() => router.push("/alquileres/consultar")}>
         <TextoAccion>Consultar alquileres</TextoAccion>
       </BotonAccion>
     </Container>

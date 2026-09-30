@@ -1,9 +1,8 @@
+/*import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { useFocusEffect } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 
 import { getAlquileres } from "@/data/alquileres";
-import { getClientes } from "@/data/cliente";
 import { getLibros } from "@/data/libros";
 
 export default function ConsultarAlquileres() {
@@ -18,17 +17,15 @@ export default function ConsultarAlquileres() {
 
   useFocusEffect(
     useCallback(() => {
-      const clientes = getClientes();
+      //const clientes = getClientes();
       const libros = getLibros();
 
-      const listado = getAlquileres().map((alquiler) => {
+      /*const listado = getAlquileres().map((alquiler) => {
         const cliente = clientes.find(
-          (cliente) => cliente.id === alquiler.clienteId
+          (cliente) => cliente.id === alquiler.clienteId,
         );
 
-        const libro = libros.find(
-          (libro) => libro.id === alquiler.libroId
-        );
+        const libro = libros.find((libro) => libro.id === alquiler.libroId);
 
         return {
           id: alquiler.id,
@@ -36,14 +33,12 @@ export default function ConsultarAlquileres() {
             ? `${cliente.nombre} ${cliente.apellido}`
             : "Cliente no encontrado",
           libro: libro ? libro.titulo : "Libro no encontrado",
-          fecha: new Date(alquiler.fechaAlquiler).toLocaleDateString(
-            "es-AR"
-          ),
+          fecha: new Date(alquiler.fechaAlquiler).toLocaleDateString("es-AR"),
         };
       });
 
       setAlquileres(listado);
-    }, [])
+    }, []),
   );
 
   return (
@@ -83,4 +78,4 @@ export default function ConsultarAlquileres() {
       )}
     </ScrollView>
   );
-}
+}*/
