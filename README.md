@@ -1,56 +1,74 @@
-# Welcome to your Expo app 👋
+# Biblioteca SG
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil para gestionar una biblioteca: su catálogo de libros, sus socios y los préstamos.
 
-## Get started
+## Descripción
 
-1. Install dependencies
+En muchas bibliotecas pequeñas, como las escolares, barriales o de institutos, los préstamos todavía se anotan en papel o en planillas sueltas. Así es difícil saber qué libros hay disponibles, quién tiene cada ejemplar y qué préstamos ya vencieron. Esto termina en libros perdidos y en tiempo dedicado a buscar información.
 
-   ```bash
-   npm install
-   ```
+**Biblioteca SG** reúne todo en una sola aplicación. Permite:
 
-2. Start the app
+- administrar el catálogo y la cantidad de copias de cada libro;
+- registrar a los socios;
+- registrar préstamos con un plazo de devolución;
+- ver de un vistazo los préstamos vencidos.
 
-   ```bash
-   npx expo start
-   ```
+Además, permite incorporar libros al catálogo buscándolos en [Open Library](https://openlibrary.org), un catálogo mundial y gratuito, sin tener que cargar sus datos a mano.
 
-In the output, you'll find options to open the app in a
+## Integrantes
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Sofia Fronte]
+- [Guillermo Lopez]
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Features
 
-## Get a fresh project
+| #   | Feature                                                | Descripción                                                                                                                                            | Estado    |
+| --- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| 1   | Registrar un cliente                                   | Alta de socios con nombre, DNI, teléfono, correo y foto (desde la galería o la cámara). Valida los datos y no permite DNI repetidos.                   | Completa  |
+| 2   | Consultar y buscar clientes                            | Listado de socios ordenado por apellido, con búsqueda por nombre o DNI.                                                                                | Completa  |
+| 3   | Modificar los datos de un cliente                      | Edición de los datos y la foto de un socio.                                                                                                            | Completa  |
+| 4   | Eliminar un cliente                                    | Baja con confirmación. No se permite si el socio tiene libros prestados.                                                                               | Completa  |
+| 5   | Consultar la ficha de un cliente                       | Datos de contacto (con acceso directo para llamar o escribir), libros que tiene en préstamo e historial de devoluciones.                               | Completa  |
+| 6   | Agregar un libro al catálogo                           | Alta de libros con título, autor, editorial, género, cantidad de copias y portada.                                                                     | Completa  |
+| 7   | Consultar, buscar y filtrar el catálogo                | Catálogo en grilla con portadas, búsqueda por título o autor y filtro por género. Muestra las copias disponibles de cada libro.                        | Completa  |
+| 8   | Consultar el detalle de un libro                       | Ficha con los datos del libro, su disponibilidad y quién tiene cada copia prestada.                                                                    | Completa  |
+| 9   | Modificar y eliminar libros                            | Edición de los datos del libro. No se puede dejar menos copias que las prestadas ni eliminar un libro con copias prestadas.                            | Completa  |
+| 10  | Registrar un préstamo                                  | Selección de socio, libro y plazo de devolución (7, 14 o 21 días). Solo ofrece libros con copias disponibles.                                          | Completa  |
+| 11  | Registrar una devolución                               | Devolución desde el listado de préstamos, la ficha del cliente o la ficha del libro. La copia vuelve a estar disponible.                               | Completa  |
+| 12  | Consultar los préstamos y sus vencimientos             | Préstamos en curso y devueltos. Los vencidos se destacan y se avisan en la pantalla de inicio.                                                         | Completa  |
+| 13  | Buscar libros en Open Library y agregarlos al catálogo | Búsqueda en una API externa con scroll infinito. Permite agregar un resultado al catálogo con su portada, eligiendo el género y la cantidad de copias. | Completa  |
+| 14  | Guardar los datos en el dispositivo                    | Conservar libros, clientes y préstamos al cerrar la aplicación (AsyncStorage).                                                                         | Pendiente |
 
-When you're ready, run:
+## Contenidos de la materia aplicados
+
+- **Navegación con Expo Router:** Stack, parámetros entre pantallas, grupos de rutas y Tabs.
+- **Estilos con Styled Components**, con componentes reutilizables.
+- **Listas:** `FlatList` en grilla y horizontal, filtros por categoría y scroll infinito.
+- **Estado global con Zustand:** tres stores (libros, clientes y alquileres) conectados entre sí.
+- **Consumo de APIs con TanStack Query:** `useQuery` y `useInfiniteQuery`, con caché y manejo de errores.
+- **Cámara y galería** con `expo-image-picker`.
+
+## Cómo ejecutar el proyecto
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Después, escanear el código QR con la app **Expo Go**, o presionar `a` para abrirla en el emulador de Android.
 
-### Other setup steps
+## Estructura
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+src/
+  app/
+    (tabs)/
+      index.tsx        Inicio
+      libros/          Catálogo, ficha, formulario y búsqueda en Open Library
+      clientes/        Listado, ficha y formulario
+      alquileres/      Listado de préstamos y nuevo préstamo
+  components/          Componentes reutilizables
+  constants/           Colores de la aplicación
+  services/            Conexión con la API de Open Library
+  store/               Stores de Zustand
+```
