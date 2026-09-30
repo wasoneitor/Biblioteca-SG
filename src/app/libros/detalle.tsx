@@ -1,4 +1,11 @@
 import { colores } from "@/constants/colores";
+import {
+  estaEnCurso,
+  estaVencido,
+  textoVencimiento,
+  useAlquileres,
+} from "@/store/alquileres";
+import { useClientes } from "@/store/clientes";
 import { copiasDisponibles, useLibros } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -11,6 +18,8 @@ export default function DetalleLibro() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const libro = useLibros((s) => s.libros.find((l) => l.id === id));
   const eliminarLibro = useLibros((s) => s.eliminarLibro);
+  const alquileres = useAlquileres((s) => s.alquileres);
+  const clientes = useClientes((s) => s.clientes);
 
   if (!libro) {
     return (
@@ -38,6 +47,11 @@ export default function DetalleLibro() {
     { length: libro.copias },
     (_, i) => i < disponibles,
   );
+
+  // Los préstamos en curso de este libro, el que vence primero arriba.
+  const prestamos = alquileres
+    .filter((a) => a.libroId === libro.id && estaEnCurso(a))
+    .sort((a, b) => a.fechaVencimiento.localeCompare(b.fechaVencimiento));
 
   const avisar = (titulo: string, mensaje: string) => {
     if (Platform.OS === "web") window.alert(mensaje);
@@ -135,6 +149,76 @@ export default function DetalleLibro() {
               ))}
             </Barra>
           </Tarjeta>
+          <BotonPrestar
+            onPress={() =>
+              router.push({
+                pathname: "/alquileres/registrar",
+                params: { libroId: libro.id },
+              })
+            }
+            disabled={!hayCopias}
+            style={{ opacity: hayCopias ? 1 : 0.4 }}
+            activeOpacity={0.8}
+          >
+            <TextoPrestar>
+              {hayCopias ? "Prestar este libro" : "Sin copias para prestar"}
+            </TextoPrestar>
+          </BotonPrestar>
+
+          <TituloSeccion>
+            {prestamos.length === 0
+              ? "Nadie lo tiene ahora"
+              : "Lo tienen ahora"}
+          </TituloSeccion>
+          {prestamos.map((a) => {
+            const cliente = clientes.find((c) => c.id === a.clienteId);
+            const vencido = estaVencido(a);
+            const iniciales = cliente
+              ? `${cliente.nombre[0]}${cliente.apellido[0]}`.toUpperCase()
+              : "?";
+            return (
+              <FilaPersona
+                key={a.id}
+                onPress={() =>
+                  cliente &&
+                  router.push({
+                    pathname: "/clientes/detalle",
+                    params: { id: cliente.id },
+                  })
+                }
+                style={
+                  vencido
+                    ? { borderWidth: 2, borderColor: colores.naranja }
+                    : undefined
+                }
+              >
+                <AvatarChico>
+                  <InicialesChicas>{iniciales}</InicialesChicas>
+                </AvatarChico>
+                <DatosPersona>
+                  <NombrePersona>
+                    {cliente
+                      ? `${cliente.nombre} ${cliente.apellido}`
+                      : "Cliente eliminado"}
+                  </NombrePersona>
+                  <TextoVence
+                    style={{
+                      color: vencido
+                        ? colores.naranjaTexto
+                        : colores.tintaSuave,
+                    }}
+                  >
+                    {textoVencimiento(a)}
+                  </TextoVence>
+                </DatosPersona>
+                <Ionicons
+                  name="chevron-forward"
+                  size={18}
+                  color={colores.tintaSuave}
+                />
+              </FilaPersona>
+            );
+          })}
 
           <BotonEliminar onPress={confirmarEliminacion} activeOpacity={0.7}>
             <Ionicons
@@ -340,4 +424,66 @@ const TextoBotonClaro = styled.Text`
   font-size: 15px;
   font-weight: 600;
   color: ${colores.azulTexto};
+`;
+
+const BotonPrestar = styled.TouchableOpacity`
+  height: 54px;
+  margin-top: 16px;
+  border-radius: 16px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colores.azul};
+`;
+
+const TextoPrestar = styled.Text`
+  font-size: 17px;
+  font-weight: bold;
+  color: #ffffff;
+`;
+
+const TituloSeccion = styled.Text`
+  font-size: 17px;
+  font-weight: bold;
+  color: ${colores.tinta};
+  margin: 24px 0 10px 0;
+`;
+
+const FilaPersona = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  background-color: ${colores.superficie};
+`;
+
+const AvatarChico = styled.View`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colores.azulClaro};
+`;
+
+const InicialesChicas = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+  color: ${colores.azulTexto};
+`;
+
+const DatosPersona = styled.View`
+  flex: 1;
+`;
+
+const NombrePersona = styled.Text`
+  font-size: 15px;
+  font-weight: 600;
+  color: ${colores.tinta};
+`;
+
+const TextoVence = styled.Text`
+  font-size: 13px;
+  margin-top: 2px;
 `;

@@ -34,6 +34,22 @@ export function diasRestantes(alquiler: Alquiler) {
   return Math.ceil(diferencia / unDia);
 }
 
+// Texto de la etiqueta: "Vence en 5 días", "Vence hoy", "Venció hace 2 días"...
+export function textoVencimiento(alquiler: Alquiler) {
+  const dias = diasRestantes(alquiler);
+  if (dias < 0) return `Venció hace ${-dias} ${dias === -1 ? "día" : "días"}`;
+  if (dias === 0) return "Vence hoy";
+  if (dias === 1) return "Vence mañana";
+  return `Vence en ${dias} días`;
+}
+
+export function formatearFecha(iso: string) {
+  return new Date(iso).toLocaleDateString("es-AR", {
+    day: "numeric",
+    month: "long",
+  });
+}
+
 // ---------- El store ----------
 
 interface AlquileresStore {

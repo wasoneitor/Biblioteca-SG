@@ -1,8 +1,9 @@
 import { colores } from "@/constants/colores";
 import {
-  diasRestantes,
   estaEnCurso,
   estaVencido,
+  formatearFecha,
+  textoVencimiento,
   useAlquileres,
   type Alquiler,
 } from "@/store/alquileres";
@@ -16,22 +17,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 type Pestania = "enCurso" | "devueltos";
-
-// Arma el texto de la etiqueta según cuánto falta o cuánto se pasó.
-function textoVencimiento(alquiler: Alquiler) {
-  const dias = diasRestantes(alquiler);
-  if (dias < 0) return `Venció hace ${-dias} ${dias === -1 ? "día" : "días"}`;
-  if (dias === 0) return "Vence hoy";
-  if (dias === 1) return "Vence mañana";
-  return `Vence en ${dias} días`;
-}
-
-function formatearFecha(iso: string) {
-  return new Date(iso).toLocaleDateString("es-AR", {
-    day: "numeric",
-    month: "long",
-  });
-}
 
 export default function ListaAlquileres() {
   const router = useRouter();

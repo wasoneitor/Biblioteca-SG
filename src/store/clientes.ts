@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { estaEnCurso, useAlquileres } from "./alquileres";
 
 export interface Cliente {
   id: string;
@@ -20,7 +21,7 @@ interface ClientesStore {
   clientes: Cliente[];
   agregarCliente: (datos: DatosCliente) => Resultado;
   editarCliente: (id: string, datos: DatosCliente) => Resultado;
-  eliminarCliente: (id: string) => void;
+  eliminarCliente: (id: string) => Resultado;
 }
 
 export const useClientes = create<ClientesStore>((set, get) => ({
@@ -56,6 +57,16 @@ export const useClientes = create<ClientesStore>((set, get) => ({
 
   // BAJA
   eliminarCliente: (id) => {
+    const tienePrestamos = useAlquileres
+      .getState()
+      .alquileres.some((a) => a.clienteId === id && estaEnCurso(a));
+    if (tienePrestamos) {
+      return {
+        ok: false,
+        error: "Tiene libros prestados. Primero registrá las devoluciones.",
+      };
+    }
     set((state) => ({ clientes: state.clientes.filter((c) => c.id !== id) }));
+    return { ok: true };
   },
 }));
