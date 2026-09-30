@@ -1,23 +1,19 @@
 import { addAlquiler } from "@/data/alquileres";
-import type { Libro } from "@/data/libros";
-import { getLibros, prestarLibro } from "@/data/libros";
 import { useClientes } from "@/store/clientes";
-import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { copiasDisponibles, useLibros } from "@/store/libros";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Alert, Platform } from "react-native";
 import styled from "styled-components/native";
 
 export default function Alquileres() {
   const clientes = useClientes((s) => s.clientes);
   const [clienteId, setClienteId] = useState<string | null>(null);
-  const [libros, setLibros] = useState<Libro[]>([]);
+  const libros = useLibros((s) => s.libros);
+  const prestarLibro = useLibros((s) => s.prestarLibro);
   const [libroId, setLibroId] = useState<string | null>(null);
   const router = useRouter();
-  useFocusEffect(
-    useCallback(() => {
-      setLibros([...getLibros()]);
-    }, []),
-  );
+
   function confirmarAlquiler() {
     if (!clienteId || !libroId) {
       if (Platform.OS === "web") {
@@ -28,13 +24,13 @@ export default function Alquileres() {
 
       return;
     }
-    if (!prestarLibro(libroId)) {
+    const resultado = prestarLibro(libroId);
+    if (!resultado.ok) {
       if (Platform.OS === "web") {
-        window.alert("No fue posible prestar el libro.");
+        window.alert(resultado.error);
       } else {
-        Alert.alert("Atención", "No fue posible prestar el libro.");
+        Alert.alert("Atención", resultado.error);
       }
-
       return;
     }
 
@@ -43,7 +39,7 @@ export default function Alquileres() {
       libroId,
       fechaAlquiler: new Date().toISOString(),
     });
-    setLibros([...getLibros()]);
+
     setClienteId(null);
     setLibroId(null);
 
@@ -93,15 +89,9 @@ export default function Alquileres() {
       <Subtitulo>Seleccionar libro</Subtitulo>
 
       {libros
-        .filter((libro) => libro.estado === "Disponible" && libro.copias > 0)
+        .filter((libro) => copiasDisponibles(libro) > 0)
         .map((libro) => (
-          <BotonCliente
-            key={libro.id}
-            onPress={() => setLibroId(libro.id)}
-            style={{
-              backgroundColor: libroId === libro.id ? "#CDEEFF" : "#FFFFFF",
-            }}
-          >
+          <BotonCliente key={libro.id} onPress={() => setLibroId(libro.id)}>
             <NombreCliente>{libro.titulo}</NombreCliente>
             <Descripcion>Autor: {libro.autor}</Descripcion>
             <Descripcion>Copias: {libro.copias}</Descripcion>

@@ -10,4 +10,5 @@ export const colores = {
   naranja: "#E07A2B", // alertas: vencidos, errores
   naranjaClaro: "#FCE9DA",
   naranjaTexto: "#9A4508",
+  fondoPortada: "#E4EAF3",
 };
