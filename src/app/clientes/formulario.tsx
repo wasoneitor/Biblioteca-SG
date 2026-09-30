@@ -1,15 +1,11 @@
+import { Campo } from "@/components/Campo";
 import { colores } from "@/constants/colores";
 import { useClientes } from "@/store/clientes";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    type TextInputProps,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
@@ -235,27 +231,6 @@ export default function FormularioCliente() {
   );
 }
 
-// ---------- Componente Campo: etiqueta + input + mensaje de error ----------
-
-interface CampoProps extends TextInputProps {
-  etiqueta: string;
-  error?: string;
-}
-
-function Campo({ etiqueta, error, ...inputProps }: CampoProps) {
-  return (
-    <GrupoCampo>
-      <Etiqueta>{etiqueta}</Etiqueta>
-      <Input
-        $error={!!error}
-        placeholderTextColor={colores.tintaSuave}
-        {...inputProps}
-      />
-      {error ? <TextoError>{error}</TextoError> : null}
-    </GrupoCampo>
-  );
-}
-
 // ---------- Estilos ----------
 
 const Contenedor = styled(SafeAreaView)`
@@ -340,33 +315,6 @@ const FilaDoble = styled.View`
   gap: 10px;
 `;
 
-const Mitad = styled.View`
-  flex: 1;
-`;
-
-const GrupoCampo = styled.View`
-  margin-bottom: 14px;
-`;
-
-const Etiqueta = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${colores.tinta};
-  margin-bottom: 6px;
-`;
-
-// $error es una "transient prop": la usa el estilo, pero no llega al TextInput.
-const Input = styled.TextInput<{ $error: boolean }>`
-  height: 48px;
-  padding: 0 14px;
-  border-radius: 12px;
-  font-size: 16px;
-  color: ${colores.tinta};
-  background-color: ${colores.superficie};
-  border-width: ${({ $error }) => ($error ? "2px" : "1px")};
-  border-color: ${({ $error }) => ($error ? colores.naranja : colores.borde)};
-`;
-
 const TextoError = styled.Text`
   font-size: 13px;
   font-weight: 600;
@@ -391,4 +339,8 @@ const TextoGuardar = styled.Text`
   font-size: 17px;
   font-weight: bold;
   color: #ffffff;
+`;
+
+const Mitad = styled.View`
+  flex: 1;
 `;
