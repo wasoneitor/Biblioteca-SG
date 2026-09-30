@@ -17,8 +17,8 @@ Además, permite incorporar libros al catálogo buscándolos en [Open Library](h
 
 ## Integrantes
 
-- [Sofia Fronte]
-- [Guillermo Lopez]
+- Sofia Fronte - 28580
+- Guillermo Lopez - 26801
 
 ## Features
 
