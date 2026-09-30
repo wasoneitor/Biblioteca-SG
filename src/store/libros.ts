@@ -20,6 +20,7 @@ export interface Libro {
   copias: number; // total de copias de la biblioteca
   prestadas: number; // cuántas están prestadas ahora
   portada: ImageSourcePropType | null; // require(...) para las locales, { uri } para las elegidas
+  claveOnline?: string; // key de Open Library, solo en los libros importados
 }
 
 // Lo que se carga en el formulario: sin id ni prestadas, que los maneja el store.

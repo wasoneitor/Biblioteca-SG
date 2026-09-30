@@ -63,7 +63,7 @@ export default function Inicio() {
     titulo: string;
     detalle: string;
     icono: NombreIcono;
-    ruta?: "/libros" | "/clientes" | "/alquileres";
+    ruta?: "/libros" | "/clientes" | "/alquileres" | "/libros/buscar";
   }[] = [
     {
       titulo: "Libros",
@@ -83,7 +83,12 @@ export default function Inicio() {
       icono: "swap-horizontal-outline",
       ruta: "/alquileres",
     },
-    { titulo: "Open Library", detalle: "Próximamente", icono: "globe-outline" },
+    {
+      titulo: "Open Library",
+      detalle: "Buscar y agregar",
+      icono: "globe-outline",
+      ruta: "/libros/buscar",
+    },
   ];
 
   return (
