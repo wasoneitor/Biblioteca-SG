@@ -1,4 +1,3 @@
-import { colores } from "@/constants/colores";
 import {
   estaEnCurso,
   estaVencido,
@@ -12,13 +11,31 @@ import { useLibros } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, FlatList, Platform } from "react-native";
+import { Alert, Platform, SectionList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 type Pestania = "enCurso" | "devueltos";
 
+// Una sección de la SectionList: un título y los préstamos que van debajo.
+// SectionList exige que los ítems de cada sección estén en "data".
+interface Seccion {
+  titulo: string;
+  alerta: boolean; // true = el título se pinta en naranja (los vencidos)
+  data: Alquiler[];
+}
+
+// "octubre de 2026" → "Octubre de 2026"
+function mesDe(iso: string) {
+  const texto = new Date(iso).toLocaleDateString("es-AR", {
+    month: "long",
+    year: "numeric",
+  });
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
 export default function ListaAlquileres() {
+  const { colores } = useTheme();
   const router = useRouter();
   const alquileres = useAlquileres((s) => s.alquileres);
   const devolverAlquiler = useAlquileres((s) => s.devolverAlquiler);
@@ -38,7 +55,39 @@ export default function ListaAlquileres() {
       (b.fechaDevolucion ?? "").localeCompare(a.fechaDevolucion ?? ""),
     );
 
-  const lista = pestania === "enCurso" ? enCurso : devueltos;
+  // ---------- Armado de las secciones ----------
+
+  // En curso: se separan en dos grupos.
+  const seccionesEnCurso: Seccion[] = [
+    {
+      titulo: "Vencidos",
+      alerta: true,
+      data: enCurso.filter((a) => estaVencido(a)),
+    },
+    {
+      titulo: "Al día",
+      alerta: false,
+      data: enCurso.filter((a) => !estaVencido(a)),
+    },
+  ];
+
+  // Devueltos: un grupo por mes de devolución.
+  // Como ya están ordenados del más nuevo al más viejo, los meses quedan en orden.
+  const seccionesDevueltos: Seccion[] = [];
+  for (const alquiler of devueltos) {
+    const mes = mesDe(alquiler.fechaDevolucion!);
+    const ultima = seccionesDevueltos[seccionesDevueltos.length - 1];
+    if (ultima && ultima.titulo === mes) {
+      ultima.data.push(alquiler); // mismo mes que el anterior: va al mismo grupo
+    } else {
+      seccionesDevueltos.push({ titulo: mes, alerta: false, data: [alquiler] });
+    }
+  }
+
+  // Las secciones vacías no se muestran (no queremos un título "Vencidos" sin nada abajo).
+  const secciones = (
+    pestania === "enCurso" ? seccionesEnCurso : seccionesDevueltos
+  ).filter((s) => s.data.length > 0);
 
   function confirmarDevolucion(
     alquiler: Alquiler,
@@ -193,10 +242,24 @@ export default function ListaAlquileres() {
         })}
       </Segmentado>
 
-      <FlatList
-        data={lista}
+      <SectionList
+        sections={secciones} // en vez de data: la lista de grupos
         keyExtractor={(item) => item.id}
-        renderItem={renderAlquiler}
+        renderItem={renderAlquiler} // cada tarjeta, igual que antes
+        // El título de cada grupo
+        renderSectionHeader={({ section }) => (
+          <EncabezadoSeccion>
+            <TituloSeccion
+              style={section.alerta ? { color: colores.naranjaTexto } : undefined}
+            >
+              {section.titulo}
+            </TituloSeccion>
+            <ContadorSeccion>{section.data.length}</ContadorSeccion>
+          </EncabezadoSeccion>
+        )}
+        // En iOS los títulos quedan "pegados" arriba al scrollear; lo apagamos
+        // para que se vea igual en Android y en iOS.
+        stickySectionHeadersEnabled={false}
         contentContainerStyle={{ padding: 20, gap: 12 }}
         ListEmptyComponent={
           <Vacio>
@@ -226,7 +289,7 @@ export default function ListaAlquileres() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Volver = styled.TouchableOpacity`
@@ -237,7 +300,7 @@ const Volver = styled.TouchableOpacity`
 `;
 
 const TextoVolver = styled.Text`
-  color: ${colores.azul};
+  color: ${({ theme }) => theme.colores.azul};
   font-size: 15px;
   font-weight: 600;
 `;
@@ -255,12 +318,12 @@ const Textos = styled.View``;
 const TituloPantalla = styled.Text`
   font-size: 32px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Subtitulo = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const BotonPrestar = styled.TouchableOpacity`
@@ -270,7 +333,7 @@ const BotonPrestar = styled.TouchableOpacity`
   height: 44px;
   padding: 0 16px;
   border-radius: 22px;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoBoton = styled.Text`
@@ -301,12 +364,37 @@ const TextoSegmento = styled.Text`
   font-weight: bold;
 `;
 
+const EncabezadoSeccion = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+`;
+
+const TituloSeccion = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: ${({ theme }) => theme.colores.tintaSuave};
+`;
+
+const ContadorSeccion = styled.Text`
+  font-size: 12px;
+  font-weight: bold;
+  padding: 1px 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  color: ${({ theme }) => theme.colores.tintaSuave};
+  background-color: ${({ theme }) => theme.colores.borde};
+`;
+
 const Tarjeta = styled.TouchableOpacity`
   flex-direction: row;
   gap: 14px;
   padding: 14px;
   border-radius: 16px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Portada = styled.Image`
@@ -320,7 +408,7 @@ const TapaGenerica = styled.View`
   height: 76px;
   padding: 6px;
   border-radius: 4px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TituloTapa = styled.Text`
@@ -336,12 +424,12 @@ const Datos = styled.View`
 const Titulo = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Cliente = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   margin-top: 2px;
 `;
 
@@ -365,7 +453,7 @@ const TextoEtiqueta = styled.Text`
 
 const TextoDevuelto = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const BotonDevolver = styled.TouchableOpacity`
@@ -373,15 +461,15 @@ const BotonDevolver = styled.TouchableOpacity`
   padding: 0 14px;
   border-radius: 18px;
   border-width: 1px;
-  border-color: ${colores.borde};
+  border-color: ${({ theme }) => theme.colores.borde};
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TextoDevolver = styled.Text`
   font-size: 14px;
   font-weight: 600;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Vacio = styled.View`
@@ -393,12 +481,12 @@ const Vacio = styled.View`
 const TituloVacio = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
   text-align: center;
 `;
 
 const TextoVacio = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   text-align: center;
 `;

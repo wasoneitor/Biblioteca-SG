@@ -1,4 +1,3 @@
-import { colores } from "@/constants/colores";
 import {
   copiasDisponibles,
   GENEROS,
@@ -11,13 +10,14 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 // "Todos" más los seis géneros del store: los chips salen de la misma lista.
 type Filtro = Genero | "Todos";
 const FILTROS: Filtro[] = ["Todos", ...GENEROS];
 
 export default function CatalogoLibros() {
+  const { colores } = useTheme();
   const router = useRouter();
   const libros = useLibros((s) => s.libros);
   const [busqueda, setBusqueda] = useState("");
@@ -160,7 +160,7 @@ export default function CatalogoLibros() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Volver = styled.TouchableOpacity`
@@ -171,7 +171,7 @@ const Volver = styled.TouchableOpacity`
 `;
 
 const TextoVolver = styled.Text`
-  color: ${colores.azul};
+  color: ${({ theme }) => theme.colores.azul};
   font-size: 15px;
   font-weight: 600;
 `;
@@ -189,12 +189,12 @@ const Textos = styled.View``;
 const TituloPantalla = styled.Text`
   font-size: 32px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Subtitulo = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const BotonAgregar = styled.TouchableOpacity`
@@ -204,7 +204,7 @@ const BotonAgregar = styled.TouchableOpacity`
   height: 44px;
   padding: 0 16px;
   border-radius: 22px;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoBoton = styled.Text`
@@ -221,14 +221,14 @@ const Buscador = styled.View`
   margin: 0 20px 14px 20px;
   padding: 0 14px;
   border-radius: 14px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const InputBuscador = styled.TextInput`
   flex: 1;
   min-width: 0;
   font-size: 16px;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Chip = styled.TouchableOpacity`
@@ -251,7 +251,7 @@ const Tarjeta = styled.TouchableOpacity`
   margin-bottom: 14px;
   padding: 10px 10px 14px 10px;
   border-radius: 16px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const FondoPortada = styled.View`
@@ -260,7 +260,7 @@ const FondoPortada = styled.View`
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
-  background-color: ${colores.fondoPortada};
+  background-color: ${({ theme }) => theme.colores.fondoPortada};
 `;
 
 const Portada = styled.Image`
@@ -274,7 +274,7 @@ const TapaGenerica = styled.View`
   height: 144px;
   padding: 10px;
   border-radius: 4px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TituloTapa = styled.Text`
@@ -286,13 +286,13 @@ const TituloTapa = styled.Text`
 const Titulo = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
   padding: 0 4px;
 `;
 
 const Autor = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   margin-top: 2px;
   padding: 0 4px;
 `;
@@ -325,12 +325,12 @@ const Vacio = styled.View`
 const TituloVacio = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
   text-align: center;
 `;
 
 const TextoVacio = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   text-align: center;
 `;

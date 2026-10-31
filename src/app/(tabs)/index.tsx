@@ -1,4 +1,3 @@
-import { colores } from "@/constants/colores";
 import { estaEnCurso, estaVencido, useAlquileres } from "@/store/alquileres";
 import { useClientes } from "@/store/clientes";
 import { useLibros } from "@/store/libros";
@@ -8,11 +7,12 @@ import { setStatusBarStyle } from "expo-status-bar";
 import { useCallback, useState, type ComponentProps } from "react";
 import { FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 type NombreIcono = ComponentProps<typeof Ionicons>["name"];
 
 export default function Inicio() {
+  const { colores } = useTheme();
   const router = useRouter();
   const libros = useLibros((s) => s.libros);
   const clientes = useClientes((s) => s.clientes);
@@ -297,7 +297,7 @@ export default function Inicio() {
 // ---------- Estilos ----------
 
 const Cabecera = styled.View`
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Fecha = styled.Text`
@@ -356,7 +356,7 @@ const TapaEstante = styled.View`
   height: 118px;
   padding: 8px;
   border-radius: 6px;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TituloTapa = styled.Text`
@@ -377,7 +377,7 @@ const Aviso = styled.TouchableOpacity`
   gap: 12px;
   padding: 14px 16px;
   border-radius: 16px;
-  background-color: ${colores.naranjaClaro};
+  background-color: ${({ theme }) => theme.colores.naranjaClaro};
 `;
 
 const TextosAviso = styled.View`
@@ -387,12 +387,12 @@ const TextosAviso = styled.View`
 const TituloAviso = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.naranjaTexto};
+  color: ${({ theme }) => theme.colores.naranjaTexto};
 `;
 
 const DetalleAviso = styled.Text`
   font-size: 13px;
-  color: ${colores.naranjaTexto};
+  color: ${({ theme }) => theme.colores.naranjaTexto};
   margin-top: 2px;
 `;
 
@@ -407,7 +407,7 @@ const TarjetaModulo = styled.TouchableOpacity`
   width: 48%;
   padding: 16px;
   border-radius: 16px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const IconoModulo = styled.View`
@@ -417,18 +417,18 @@ const IconoModulo = styled.View`
   align-items: center;
   justify-content: center;
   margin-bottom: 14px;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const TituloModulo = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const DetalleModulo = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   margin-top: 2px;
 `;
 const CajaBusqueda = styled.View`
@@ -455,7 +455,7 @@ const SinResultados = styled.Text`
   font-size: 15px;
   text-align: center;
   padding: 24px 0;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const GrupoResultados = styled.View`
@@ -465,13 +465,13 @@ const GrupoResultados = styled.View`
 const TituloGrupo = styled.Text`
   font-size: 14px;
   font-weight: bold;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const ListaResultados = styled.View`
   border-radius: 16px;
   overflow: hidden;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const FilaResultado = styled.TouchableOpacity`
@@ -480,7 +480,7 @@ const FilaResultado = styled.TouchableOpacity`
   gap: 12px;
   padding: 12px 14px;
   border-bottom-width: 1px;
-  border-bottom-color: ${colores.borde};
+  border-bottom-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const PortadaChica = styled.Image`
@@ -493,7 +493,7 @@ const TapaChica = styled.View`
   width: 32px;
   height: 44px;
   border-radius: 3px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const AvatarChico = styled.View`
@@ -502,13 +502,13 @@ const AvatarChico = styled.View`
   border-radius: 18px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const InicialesChicas = styled.Text`
   font-size: 13px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const TextosResultado = styled.View`
@@ -518,10 +518,10 @@ const TextosResultado = styled.View`
 const NombreResultado = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const DetalleResultado = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;

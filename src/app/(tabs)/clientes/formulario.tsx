@@ -1,5 +1,4 @@
 import { Campo } from "@/components/Campo";
-import { colores } from "@/constants/colores";
 import { useClientes } from "@/store/clientes";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -7,7 +6,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 // Un error posible por cada campo del formulario.
 type Errores = Partial<
@@ -17,6 +16,7 @@ type Errores = Partial<
 const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function FormularioCliente() {
+  const { colores } = useTheme();
   const router = useRouter();
   const agregarCliente = useClientes((s) => s.agregarCliente);
   const editarCliente = useClientes((s) => s.editarCliente);
@@ -235,7 +235,7 @@ export default function FormularioCliente() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Encabezado = styled.View`
@@ -251,13 +251,13 @@ const BotonVolver = styled.TouchableOpacity`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Titulo = styled.Text`
   font-size: 28px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const FilaFoto = styled.View`
@@ -273,10 +273,10 @@ const SinFoto = styled.View`
   border-radius: 38px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
   border-width: 2px;
   border-style: dashed;
-  border-color: ${colores.borde};
+  border-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const Foto = styled.Image`
@@ -300,14 +300,14 @@ const BotonChico = styled.TouchableOpacity`
   padding: 0 14px;
   border-radius: 20px;
   border-width: 1px;
-  border-color: ${colores.borde};
-  background-color: ${colores.superficie};
+  border-color: ${({ theme }) => theme.colores.borde};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TextoChico = styled.Text`
   font-size: 14px;
   font-weight: 600;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const FilaDoble = styled.View`
@@ -318,13 +318,13 @@ const FilaDoble = styled.View`
 const TextoError = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${colores.naranjaTexto};
+  color: ${({ theme }) => theme.colores.naranjaTexto};
   margin-top: 4px;
 `;
 
 const BarraInferior = styled.View`
   padding: 12px 20px;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const BotonGuardar = styled.TouchableOpacity`
@@ -332,7 +332,7 @@ const BotonGuardar = styled.TouchableOpacity`
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoGuardar = styled.Text`

@@ -1,4 +1,3 @@
-import { colores } from "@/constants/colores";
 import {
     buscarLibros,
     POR_PAGINA,
@@ -11,9 +10,10 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 export default function BuscarOnline() {
+  const { colores } = useTheme();
   const router = useRouter();
   const libros = useLibros((s) => s.libros);
 
@@ -217,7 +217,7 @@ export default function BuscarOnline() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Encabezado = styled.View`
@@ -233,7 +233,7 @@ const BotonVolver = styled.TouchableOpacity`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Textos = styled.View`
@@ -243,12 +243,12 @@ const Textos = styled.View`
 const TituloPantalla = styled.Text`
   font-size: 28px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Subtitulo = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const FilaBusqueda = styled.View`
@@ -267,15 +267,15 @@ const Buscador = styled.View`
   padding: 0 14px;
   border-radius: 14px;
   border-width: 2px;
-  border-color: ${colores.azul};
-  background-color: ${colores.superficie};
+  border-color: ${({ theme }) => theme.colores.azul};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const InputBuscador = styled.TextInput`
   flex: 1;
   min-width: 0;
   font-size: 16px;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const BotonBuscar = styled.TouchableOpacity`
@@ -283,7 +283,7 @@ const BotonBuscar = styled.TouchableOpacity`
   padding: 0 16px;
   border-radius: 14px;
   justify-content: center;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoBuscar = styled.Text`
@@ -294,7 +294,7 @@ const TextoBuscar = styled.Text`
 
 const Conteo = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   padding: 0 20px 8px 20px;
 `;
 
@@ -304,14 +304,14 @@ const Fila = styled.TouchableOpacity`
   gap: 14px;
   padding: 12px 0;
   border-bottom-width: 1px;
-  border-bottom-color: ${colores.borde};
+  border-bottom-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const Portada = styled.Image`
   width: 50px;
   height: 72px;
   border-radius: 4px;
-  background-color: ${colores.fondoPortada};
+  background-color: ${({ theme }) => theme.colores.fondoPortada};
 `;
 
 const TapaGenerica = styled.View`
@@ -319,7 +319,7 @@ const TapaGenerica = styled.View`
   height: 72px;
   padding: 6px;
   border-radius: 4px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TituloTapa = styled.Text`
@@ -336,12 +336,12 @@ const Datos = styled.View`
 const Titulo = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Detalle = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Etiqueta = styled.View`
@@ -349,13 +349,13 @@ const Etiqueta = styled.View`
   margin-top: 4px;
   padding: 2px 8px;
   border-radius: 10px;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const TextoEtiqueta = styled.Text`
   font-size: 12px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const FilaCargando = styled.View`
@@ -368,7 +368,7 @@ const FilaCargando = styled.View`
 
 const TextoCargando = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Vacio = styled.View`
@@ -381,13 +381,13 @@ const TituloVacio = styled.Text`
   font-size: 17px;
   font-weight: bold;
   text-align: center;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TextoVacio = styled.Text`
   font-size: 14px;
   text-align: center;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const BotonClaro = styled.TouchableOpacity`
@@ -396,11 +396,11 @@ const BotonClaro = styled.TouchableOpacity`
   margin-top: 8px;
   border-radius: 22px;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const TextoBotonClaro = styled.Text`
   font-size: 15px;
   font-weight: 600;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;

@@ -1,5 +1,4 @@
 import { Campo, Etiqueta } from "@/components/Campo";
-import { colores } from "@/constants/colores";
 import { obtenerDetalle } from "@/services/openLibrary";
 import { GENEROS, useLibros, type Genero } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,7 +7,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Alert, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 // Sugiere un género a partir de los temas de la API, que vienen en inglés.
 function sugerirGenero(temas: string[]): Genero | null {
@@ -21,6 +20,7 @@ function sugerirGenero(temas: string[]): Genero | null {
 }
 
 export default function LibroOnline() {
+  const { colores } = useTheme();
   const router = useRouter();
   // Los datos llegan desde la búsqueda, todos como texto.
   const params = useLocalSearchParams<{
@@ -232,7 +232,7 @@ export default function LibroOnline() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const BotonVolver = styled.TouchableOpacity`
@@ -241,7 +241,7 @@ const BotonVolver = styled.TouchableOpacity`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Cabecera = styled.View`
@@ -254,7 +254,7 @@ const Portada = styled.Image`
   width: 104px;
   height: 152px;
   border-radius: 6px;
-  background-color: ${colores.fondoPortada};
+  background-color: ${({ theme }) => theme.colores.fondoPortada};
 `;
 
 const TapaGenerica = styled.View`
@@ -262,7 +262,7 @@ const TapaGenerica = styled.View`
   height: 152px;
   padding: 12px;
   border-radius: 6px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TituloTapa = styled.Text`
@@ -279,23 +279,23 @@ const DatosCabecera = styled.View`
 const Titulo = styled.Text`
   font-size: 22px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Autor = styled.Text`
   font-size: 15px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Dato = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Descripcion = styled.Text`
   font-size: 15px;
   line-height: 22px;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const FilaTemas = styled.View`
@@ -307,30 +307,30 @@ const FilaTemas = styled.View`
 const Tema = styled.View`
   padding: 4px 10px;
   border-radius: 12px;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const TextoTema = styled.Text`
   font-size: 12px;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const Separador = styled.View`
   height: 1px;
-  background-color: ${colores.borde};
+  background-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const Subtitulo = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Grupo = styled.View``;
 
 const TextoSugerido = styled.Text`
   font-weight: normal;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const FilaChips = styled.View`
@@ -364,7 +364,7 @@ const Contador = styled.View`
   gap: 4px;
   padding: 4px;
   border-radius: 14px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const BotonContador = styled.TouchableOpacity`
@@ -373,7 +373,7 @@ const BotonContador = styled.TouchableOpacity`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const NumeroCopias = styled.Text`
@@ -381,7 +381,7 @@ const NumeroCopias = styled.Text`
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const BotonClaro = styled.TouchableOpacity`
@@ -389,18 +389,18 @@ const BotonClaro = styled.TouchableOpacity`
   border-radius: 14px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const TextoBotonClaro = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const BarraInferior = styled.View`
   padding: 12px 20px;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const BotonAgregar = styled.TouchableOpacity`
@@ -408,7 +408,7 @@ const BotonAgregar = styled.TouchableOpacity`
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoAgregar = styled.Text`

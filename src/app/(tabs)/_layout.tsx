@@ -1,8 +1,9 @@
-import { colores } from "@/constants/colores";
+import { useTheme } from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
 export default function LayoutPestanias() {
+  const { colores } = useTheme();
   return (
     <Tabs
       screenOptions={{

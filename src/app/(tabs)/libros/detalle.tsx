@@ -1,4 +1,3 @@
-import { colores } from "@/constants/colores";
 import {
   estaEnCurso,
   estaVencido,
@@ -11,9 +10,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 export default function DetalleLibro() {
+  const { colores } = useTheme();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const libro = useLibros((s) => s.libros.find((l) => l.id === id));
@@ -238,12 +238,12 @@ export default function DetalleLibro() {
 
 const Fondo = styled.View`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 // El bloque celeste de arriba; la portada "sale" por debajo con un margen negativo.
@@ -267,7 +267,7 @@ const BotonRedondo = styled.TouchableOpacity`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const BotonEditar = styled.TouchableOpacity`
@@ -277,13 +277,13 @@ const BotonEditar = styled.TouchableOpacity`
   height: 44px;
   padding: 0 16px;
   border-radius: 22px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TextoEditar = styled.Text`
   font-size: 15px;
   font-weight: 600;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Portada = styled.Image`
@@ -299,7 +299,7 @@ const TapaGenerica = styled.View`
   padding: 14px;
   border-radius: 6px;
   margin-bottom: -36px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TituloTapa = styled.Text`
@@ -316,13 +316,13 @@ const Titulo = styled.Text`
   font-size: 26px;
   font-weight: bold;
   text-align: center;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Autor = styled.Text`
   font-size: 16px;
   text-align: center;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   margin-top: 4px;
 `;
 
@@ -337,20 +337,20 @@ const FilaEtiquetas = styled.View`
 const Etiqueta = styled.View`
   padding: 5px 12px;
   border-radius: 14px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TextoEtiqueta = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Tarjeta = styled.View`
   padding: 16px;
   border-radius: 16px;
   gap: 10px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const FilaDisponibilidad = styled.View`
@@ -362,7 +362,7 @@ const FilaDisponibilidad = styled.View`
 const TextoFuerte = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TextoCopias = styled.Text`
@@ -389,13 +389,13 @@ const BotonEliminar = styled.TouchableOpacity`
   height: 52px;
   margin-top: 28px;
   border-radius: 16px;
-  background-color: ${colores.naranjaClaro};
+  background-color: ${({ theme }) => theme.colores.naranjaClaro};
 `;
 
 const TextoEliminar = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: ${colores.naranjaTexto};
+  color: ${({ theme }) => theme.colores.naranjaTexto};
 `;
 
 const Vacio = styled.View`
@@ -409,7 +409,7 @@ const Vacio = styled.View`
 const TituloVacio = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const BotonClaro = styled.TouchableOpacity`
@@ -417,13 +417,13 @@ const BotonClaro = styled.TouchableOpacity`
   padding: 0 18px;
   border-radius: 22px;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const TextoBotonClaro = styled.Text`
   font-size: 15px;
   font-weight: 600;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const BotonPrestar = styled.TouchableOpacity`
@@ -432,7 +432,7 @@ const BotonPrestar = styled.TouchableOpacity`
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoPrestar = styled.Text`
@@ -444,7 +444,7 @@ const TextoPrestar = styled.Text`
 const TituloSeccion = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
   margin: 24px 0 10px 0;
 `;
 
@@ -455,7 +455,7 @@ const FilaPersona = styled.TouchableOpacity`
   padding: 12px 14px;
   margin-bottom: 10px;
   border-radius: 16px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const AvatarChico = styled.View`
@@ -464,13 +464,13 @@ const AvatarChico = styled.View`
   border-radius: 20px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const InicialesChicas = styled.Text`
   font-size: 15px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const DatosPersona = styled.View`
@@ -480,7 +480,7 @@ const DatosPersona = styled.View`
 const NombrePersona = styled.Text`
   font-size: 15px;
   font-weight: 600;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TextoVence = styled.Text`

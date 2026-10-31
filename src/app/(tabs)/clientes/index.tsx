@@ -1,13 +1,13 @@
-import { colores } from "@/constants/colores";
 import { useClientes, type Cliente } from "@/store/clientes";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 export default function ListaClientes() {
+  const { colores } = useTheme();
   const router = useRouter();
   const clientes = useClientes((s) => s.clientes);
   const [busqueda, setBusqueda] = useState("");
@@ -117,7 +117,7 @@ export default function ListaClientes() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Volver = styled.TouchableOpacity`
@@ -128,7 +128,7 @@ const Volver = styled.TouchableOpacity`
 `;
 
 const TextoVolver = styled.Text`
-  color: ${colores.azul};
+  color: ${({ theme }) => theme.colores.azul};
   font-size: 15px;
   font-weight: 600;
 `;
@@ -146,12 +146,12 @@ const Textos = styled.View``;
 const Titulo = styled.Text`
   font-size: 32px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Subtitulo = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const BotonAgregar = styled.TouchableOpacity`
@@ -161,7 +161,7 @@ const BotonAgregar = styled.TouchableOpacity`
   height: 44px;
   padding: 0 16px;
   border-radius: 22px;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoBoton = styled.Text`
@@ -178,14 +178,14 @@ const Buscador = styled.View`
   margin: 0 20px 16px 20px;
   padding: 0 14px;
   border-radius: 14px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const InputBuscador = styled.TextInput`
   flex: 1;
   min-width: 0;
   font-size: 16px;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Fila = styled.TouchableOpacity`
@@ -201,7 +201,7 @@ const Avatar = styled.View`
   border-radius: 23px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const Foto = styled.Image`
@@ -213,7 +213,7 @@ const Foto = styled.Image`
 const Iniciales = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const Datos = styled.View`
@@ -223,19 +223,19 @@ const Datos = styled.View`
 const Nombre = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Dni = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   margin-top: 2px;
 `;
 
 const Separador = styled.View`
   height: 1px;
   margin-left: 74px;
-  background-color: ${colores.borde};
+  background-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const Vacio = styled.View`
@@ -247,12 +247,12 @@ const Vacio = styled.View`
 const TituloVacio = styled.Text`
   font-size: 17px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
   text-align: center;
 `;
 
 const TextoVacio = styled.Text`
   font-size: 14px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
   text-align: center;
 `;

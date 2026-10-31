@@ -1,4 +1,3 @@
-import { colores } from "@/constants/colores";
 import { PLAZOS, useAlquileres, type Plazo } from "@/store/alquileres";
 import { useClientes } from "@/store/clientes";
 import { copiasDisponibles, useLibros } from "@/store/libros";
@@ -7,9 +6,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 export default function NuevoPrestamo() {
+  const { colores } = useTheme();
   const router = useRouter();
   // Si venimos desde la ficha de un libro o de un cliente, llega ya elegido.
   const params = useLocalSearchParams<{
@@ -278,7 +278,7 @@ export default function NuevoPrestamo() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Encabezado = styled.View`
@@ -293,13 +293,13 @@ const BotonVolver = styled.TouchableOpacity`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TituloPantalla = styled.Text`
   font-size: 28px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Seccion = styled.View`
@@ -309,7 +309,7 @@ const Seccion = styled.View`
 const TituloSeccion = styled.Text`
   font-size: 14px;
   font-weight: bold;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Elegido = styled.View`
@@ -319,8 +319,8 @@ const Elegido = styled.View`
   padding: 14px;
   border-radius: 16px;
   border-width: 2px;
-  border-color: ${colores.azul};
-  background-color: ${colores.superficie};
+  border-color: ${({ theme }) => theme.colores.azul};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Avatar = styled.View`
@@ -329,7 +329,7 @@ const Avatar = styled.View`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const Foto = styled.Image`
@@ -341,7 +341,7 @@ const Foto = styled.Image`
 const Iniciales = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const DatosElegido = styled.View`
@@ -351,18 +351,18 @@ const DatosElegido = styled.View`
 const Nombre = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Detalle = styled.Text`
   font-size: 13px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Disponibles = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
   margin-top: 2px;
 `;
 
@@ -373,7 +373,7 @@ const BotonCambiar = styled.TouchableOpacity`
 const TextoCambiar = styled.Text`
   font-size: 14px;
   font-weight: bold;
-  color: ${colores.azul};
+  color: ${({ theme }) => theme.colores.azul};
 `;
 
 const Portada = styled.Image`
@@ -387,7 +387,7 @@ const TapaGenerica = styled.View`
   height: 72px;
   padding: 6px;
   border-radius: 4px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const TituloTapa = styled.Text`
@@ -403,20 +403,20 @@ const Buscador = styled.View`
   height: 44px;
   padding: 0 12px;
   border-radius: 12px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const InputBuscador = styled.TextInput`
   flex: 1;
   min-width: 0;
   font-size: 15px;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Lista = styled.View`
   border-radius: 16px;
   overflow: hidden;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Opcion = styled.TouchableOpacity`
@@ -425,7 +425,7 @@ const Opcion = styled.TouchableOpacity`
   gap: 12px;
   padding: 12px 14px;
   border-bottom-width: 1px;
-  border-bottom-color: ${colores.borde};
+  border-bottom-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const AvatarChico = styled.View`
@@ -434,13 +434,13 @@ const AvatarChico = styled.View`
   border-radius: 18px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azulClaro};
+  background-color: ${({ theme }) => theme.colores.azulClaro};
 `;
 
 const InicialesChicas = styled.Text`
   font-size: 13px;
   font-weight: bold;
-  color: ${colores.azulTexto};
+  color: ${({ theme }) => theme.colores.azulTexto};
 `;
 
 const PortadaChica = styled.Image`
@@ -453,14 +453,14 @@ const TapaChica = styled.View`
   width: 32px;
   height: 44px;
   border-radius: 3px;
-  background-color: ${colores.tinta};
+  background-color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const SinResultados = styled.Text`
   padding: 16px;
   font-size: 14px;
   text-align: center;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const FilaPlazos = styled.View`
@@ -492,14 +492,14 @@ const BarraInferior = styled.View`
   gap: 10px;
   padding: 14px 20px;
   border-top-width: 1px;
-  border-top-color: ${colores.borde};
-  background-color: ${colores.superficie};
+  border-top-color: ${({ theme }) => theme.colores.borde};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const Resumen = styled.Text`
   font-size: 14px;
   text-align: center;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const BotonConfirmar = styled.TouchableOpacity`
@@ -507,7 +507,7 @@ const BotonConfirmar = styled.TouchableOpacity`
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoConfirmar = styled.Text`

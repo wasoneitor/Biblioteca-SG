@@ -1,5 +1,4 @@
 import { Campo, Etiqueta, TextoError } from "@/components/Campo";
-import { colores } from "@/constants/colores";
 import { GENEROS, useLibros, type Genero } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -12,13 +11,14 @@ import {
   type ImageSourcePropType,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
 type Errores = Partial<
   Record<"titulo" | "autor" | "editorial" | "genero" | "copias", string>
 >;
 
 export default function FormularioLibro() {
+  const { colores } = useTheme();
   const router = useRouter();
   const agregarLibro = useLibros((s) => s.agregarLibro);
   const editarLibro = useLibros((s) => s.editarLibro);
@@ -261,7 +261,7 @@ export default function FormularioLibro() {
 
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const Encabezado = styled.View`
@@ -277,13 +277,13 @@ const BotonVolver = styled.TouchableOpacity`
   border-radius: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TituloPantalla = styled.Text`
   font-size: 28px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const FilaPortada = styled.View`
@@ -301,15 +301,15 @@ const SinPortada = styled.View`
   align-items: center;
   justify-content: center;
   gap: 4px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
   border-width: 2px;
   border-style: dashed;
-  border-color: ${colores.borde};
+  border-color: ${({ theme }) => theme.colores.borde};
 `;
 
 const TextoSinPortada = styled.Text`
   font-size: 12px;
-  color: ${colores.tintaSuave};
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Portada = styled.Image`
@@ -333,14 +333,14 @@ const BotonChico = styled.TouchableOpacity`
   padding: 0 14px;
   border-radius: 20px;
   border-width: 1px;
-  border-color: ${colores.borde};
-  background-color: ${colores.superficie};
+  border-color: ${({ theme }) => theme.colores.borde};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const TextoChico = styled.Text`
   font-size: 14px;
   font-weight: 600;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const Grupo = styled.View`
@@ -378,7 +378,7 @@ const Contador = styled.View`
   gap: 4px;
   padding: 4px;
   border-radius: 14px;
-  background-color: ${colores.superficie};
+  background-color: ${({ theme }) => theme.colores.superficie};
 `;
 
 const BotonContador = styled.TouchableOpacity`
@@ -387,7 +387,7 @@ const BotonContador = styled.TouchableOpacity`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const NumeroCopias = styled.Text`
@@ -395,12 +395,12 @@ const NumeroCopias = styled.Text`
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-  color: ${colores.tinta};
+  color: ${({ theme }) => theme.colores.tinta};
 `;
 
 const BarraInferior = styled.View`
   padding: 12px 20px;
-  background-color: ${colores.fondo};
+  background-color: ${({ theme }) => theme.colores.fondo};
 `;
 
 const BotonGuardar = styled.TouchableOpacity`
@@ -408,7 +408,7 @@ const BotonGuardar = styled.TouchableOpacity`
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${colores.azul};
+  background-color: ${({ theme }) => theme.colores.azul};
 `;
 
 const TextoGuardar = styled.Text`
