@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { tema } from "@/constants/tema";
 import { Stack } from "expo-router";
+import { ThemeProvider } from "styled-components/native";
 
 // Se crea una sola vez, afuera del componente, para que la caché no se pierda en cada render.
 const queryClient = new QueryClient({
@@ -14,7 +16,10 @@ const queryClient = new QueryClient({
 export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ headerShown: false }} />
+      {/* Todo lo que esté adentro puede leer el tema, sin importarlo */}
+      <ThemeProvider theme={tema}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
