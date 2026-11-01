@@ -4,6 +4,7 @@ import {
   textoVencimiento,
   useAlquileres,
 } from "@/store/alquileres";
+import { BotonEscuchar } from "@/components/BotonEscuchar";
 import { useClientes } from "@/store/clientes";
 import { copiasDisponibles, useLibros } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
@@ -41,6 +42,13 @@ export default function DetalleLibro() {
 
   const disponibles = copiasDisponibles(libro);
   const hayCopias = disponibles > 0;
+
+  // El texto que lee el botón "Escuchar ficha".
+  const textoParaLeer =
+    `${libro.titulo}, de ${libro.autor}. Editorial ${libro.editorial}. ` +
+    (hayCopias
+      ? `Hay ${disponibles} ${disponibles === 1 ? "copia disponible" : "copias disponibles"} de ${libro.copias}.`
+      : "No hay copias disponibles en este momento.");
 
   // Una barrita por copia: azul si está libre, gris si está prestada.
   const segmentos = Array.from(
@@ -125,6 +133,11 @@ export default function DetalleLibro() {
             </Etiqueta>
           </FilaEtiquetas>
 
+          {/* Lee en voz alta los datos del libro (expo-speech) */}
+          <ZonaEscuchar>
+            <BotonEscuchar texto={textoParaLeer} etiqueta="Escuchar ficha" />
+          </ZonaEscuchar>
+
           <Tarjeta>
             <FilaDisponibilidad>
               <TextoFuerte>Disponibilidad</TextoFuerte>
@@ -180,8 +193,7 @@ export default function DetalleLibro() {
               <FilaPersona
                 key={a.id}
                 onPress={() =>
-                  cliente &&
-                  router.push(`/clientes/${cliente.id}`)
+                  cliente && router.push(`/clientes/${cliente.id}`)
                 }
                 style={
                   vencido
@@ -341,6 +353,11 @@ const TextoEtiqueta = styled.Text`
   font-size: 13px;
   font-weight: 600;
   color: ${({ theme }) => theme.colores.tinta};
+`;
+
+const ZonaEscuchar = styled.View`
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 const Tarjeta = styled.View`
