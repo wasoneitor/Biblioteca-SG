@@ -2,6 +2,7 @@ import { estaEnCurso, estaVencido, useAlquileres } from "@/store/alquileres";
 import { useClientes } from "@/store/clientes";
 import { useLibros } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect, useRouter } from "expo-router";
 import { setStatusBarStyle } from "expo-status-bar";
 import { useCallback, useState, type ComponentProps } from "react";
@@ -96,8 +97,13 @@ export default function Inicio() {
       style={{ backgroundColor: colores.fondo }}
       contentContainerStyle={{ paddingBottom: 32 }}
     >
-      {/* ---------- Encabezado azul marino con el estante ---------- */}
+      {/* ---------- Encabezado con degradado y el estante ---------- */}
       <Cabecera>
+        <FondoDegradado
+          colors={[colores.tinta, colores.azulTexto]} // de azul marino a azul
+          start={{ x: 0, y: 0 }} // arranca arriba a la izquierda...
+          end={{ x: 1, y: 1 }} // ...y termina abajo a la derecha (en diagonal)
+        />
         <SafeAreaView edges={["top"]}>
           <Fecha>{fecha}</Fecha>
           <Marca>Biblioteca SG</Marca>
@@ -296,8 +302,17 @@ export default function Inicio() {
 
 // ---------- Estilos ----------
 
-const Cabecera = styled.View`
-  background-color: ${({ theme }) => theme.colores.tinta};
+// La cabecera ya no tiene color de fondo: lo pinta el degradado que va adentro.
+const Cabecera = styled.View``;
+
+// El degradado ocupa toda la cabecera, por detrás del contenido.
+// "absolute" lo saca del flujo: no empuja a nadie, solo pinta el fondo.
+const FondoDegradado = styled(LinearGradient)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 `;
 
 const Fecha = styled.Text`
