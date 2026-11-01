@@ -36,7 +36,7 @@ export default function CatalogoLibros() {
     return (
       <Tarjeta
         onPress={() =>
-          router.push({ pathname: "/libros/detalle", params: { id: item.id } })
+          router.push(`/libros/${item.id}`)
         }
         activeOpacity={0.7}
       >

@@ -145,10 +145,7 @@ export default function Inicio() {
           renderItem={({ item }) => (
             <LibroEstante
               onPress={() =>
-                router.push({
-                  pathname: "/libros/detalle",
-                  params: { id: item.id },
-                })
+                router.push(`/libros/${item.id}`)
               }
               activeOpacity={0.8}
             >
@@ -183,10 +180,7 @@ export default function Inicio() {
                     <FilaResultado
                       key={l.id}
                       onPress={() =>
-                        router.push({
-                          pathname: "/libros/detalle",
-                          params: { id: l.id },
-                        })
+                        router.push(`/libros/${l.id}`)
                       }
                     >
                       {l.portada ? (
@@ -216,10 +210,7 @@ export default function Inicio() {
                     <FilaResultado
                       key={c.id}
                       onPress={() =>
-                        router.push({
-                          pathname: "/clientes/detalle",
-                          params: { id: c.id },
-                        })
+                        router.push(`/clientes/${c.id}`)
                       }
                     >
                       <AvatarChico>

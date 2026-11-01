@@ -28,10 +28,7 @@ export default function ListaClientes() {
       // (en vez de volverse transparente como TouchableOpacity).
       <Fila
         onPress={() =>
-          router.push({
-            pathname: "/clientes/detalle",
-            params: { id: item.id },
-          })
+          router.push(`/clientes/${item.id}`)
         }
         underlayColor={colores.azulClaro} // el color que aparece al presionar
       >

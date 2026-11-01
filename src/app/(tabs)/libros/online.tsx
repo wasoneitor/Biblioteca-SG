@@ -131,10 +131,7 @@ export default function LibroOnline() {
             <Subtitulo>Este libro ya está en tu catálogo</Subtitulo>
             <BotonClaro
               onPress={() =>
-                router.push({
-                  pathname: "/libros/detalle",
-                  params: { id: existente.id },
-                })
+                router.push(`/libros/${existente.id}`)
               }
             >
               <TextoBotonClaro>Ver la ficha del libro</TextoBotonClaro>

@@ -120,10 +120,7 @@ export default function ListaAlquileres() {
       <Tarjeta
         onPress={() =>
           cliente &&
-          router.push({
-            pathname: "/clientes/detalle",
-            params: { id: cliente.id },
-          })
+          router.push(`/clientes/${cliente.id}`)
         }
         activeOpacity={0.7}
         style={

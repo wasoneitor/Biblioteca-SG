@@ -181,10 +181,7 @@ export default function DetalleLibro() {
                 key={a.id}
                 onPress={() =>
                   cliente &&
-                  router.push({
-                    pathname: "/clientes/detalle",
-                    params: { id: cliente.id },
-                  })
+                  router.push(`/clientes/${cliente.id}`)
                 }
                 style={
                   vencido

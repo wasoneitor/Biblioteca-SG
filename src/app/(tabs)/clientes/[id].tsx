@@ -17,7 +17,8 @@ import styled, { useTheme } from "styled-components/native";
 export default function DetalleCliente() {
   const { colores } = useTheme();
   const router = useRouter();
-  // El id llega desde la lista: router.push({ pathname: "/clientes/detalle", params: { id } })
+  // El archivo se llama [id].tsx: los corchetes indican que esa parte de la ruta cambia.
+  // Si se abre /clientes/5, useLocalSearchParams devuelve { id: "5" }.
   const { id } = useLocalSearchParams<{ id: string }>();
 
   // Buscamos al cliente en el store. Si sus datos cambian, la ficha se actualiza sola.
