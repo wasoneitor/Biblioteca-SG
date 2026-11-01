@@ -1,3 +1,4 @@
+import { Animacion } from "@/components/Animacion";
 import { PLAZOS, useAlquileres, type Plazo } from "@/store/alquileres";
 import { useClientes } from "@/store/clientes";
 import { copiasDisponibles, useLibros } from "@/store/libros";
@@ -28,6 +29,7 @@ export default function NuevoPrestamo() {
   const [plazo, setPlazo] = useState<Plazo>(14);
   const [buscarCliente, setBuscarCliente] = useState("");
   const [buscarLibro, setBuscarLibro] = useState("");
+  const [registrado, setRegistrado] = useState(false); // true = mostrar la pantalla de éxito
 
   const cliente = clientes.find((c) => c.id === clienteId);
   const libro = libros.find((l) => l.id === libroId);
@@ -55,6 +57,26 @@ export default function NuevoPrestamo() {
     month: "long",
   });
 
+  // Después de confirmar: pantalla de éxito con la animación Lottie.
+  // Cuando la animación termina (dura 2,5 segundos), volvemos solos.
+  if (registrado) {
+    return (
+      <PantallaExito edges={["top", "bottom"]}>
+        <Animacion
+          nombre="exito"
+          tamanio={220}
+          enBucle={false}
+          alTerminar={() => setTimeout(() => router.back(), 300)}
+        />
+        <TituloExito>¡Préstamo registrado!</TituloExito>
+        <TextoExito>
+          {libro?.titulo} para {cliente?.nombre} {cliente?.apellido}.{"\n"}
+          Vence el {textoVencimiento}.
+        </TextoExito>
+      </PantallaExito>
+    );
+  }
+
   function avisar(titulo: string, mensaje: string) {
     if (Platform.OS === "web") window.alert(mensaje);
     else Alert.alert(titulo, mensaje);
@@ -67,7 +89,7 @@ export default function NuevoPrestamo() {
       avisar("No se pudo prestar", resultado.error);
       return;
     }
-    router.back();
+    setRegistrado(true); // en vez de volver enseguida, mostramos la animación de éxito
   }
 
   const iniciales = (nombre: string, apellido: string) =>
@@ -279,6 +301,28 @@ export default function NuevoPrestamo() {
 const Contenedor = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.colores.fondo};
+`;
+
+const PantallaExito = styled(SafeAreaView)`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  background-color: ${({ theme }) => theme.colores.fondo};
+`;
+
+const TituloExito = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colores.tinta};
+`;
+
+const TextoExito = styled.Text`
+  font-size: 15px;
+  line-height: 22px;
+  text-align: center;
+  color: ${({ theme }) => theme.colores.tintaSuave};
 `;
 
 const Encabezado = styled.View`

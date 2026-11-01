@@ -1,8 +1,9 @@
 import {
-    buscarLibros,
-    POR_PAGINA,
-    type LibroOnline,
+  buscarLibros,
+  POR_PAGINA,
+  type LibroOnline,
 } from "@/services/openLibrary";
+import { Animacion } from "@/components/Animacion";
 import { useLibros } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -83,22 +84,19 @@ export default function BuscarOnline() {
       );
     }
     if (isLoading) {
+      // Mientras llega la primera página: la animación Lottie de "cargando".
       return (
-        <ActivityIndicator
-          size="large"
-          color={colores.azul}
-          style={{ marginTop: 48 }}
-        />
+        <Vacio>
+          <Animacion nombre="cargando" tamanio={170} />
+          <TextoVacio>Buscando en Open Library…</TextoVacio>
+        </Vacio>
       );
     }
     if (isError) {
       return (
         <Vacio>
-          <Ionicons
-            name="cloud-offline-outline"
-            size={44}
-            color={colores.borde}
-          />
+          {/* Si falla la conexión: la animación de error (se reproduce una vez) */}
+          <Animacion nombre="error" tamanio={110} enBucle={false} />
           <TituloVacio>No se pudo conectar</TituloVacio>
           <TextoVacio>
             Revisá tu conexión a internet. ({error.message})
