@@ -6,6 +6,7 @@ import {
   useAlquileres,
   type Alquiler,
 } from "@/store/alquileres";
+import { Latido } from "@/components/Latido";
 import { useClientes } from "@/store/clientes";
 import { useLibros } from "@/store/libros";
 import { Ionicons } from "@expo/vector-icons";
@@ -116,80 +117,82 @@ export default function ListaAlquileres() {
     const vencido = estaVencido(item);
     const enCursoItem = estaEnCurso(item);
 
+    // Si el préstamo está vencido, la tarjeta "late" para llamar la atención.
     return (
-      <Tarjeta
-        onPress={() =>
-          cliente &&
-          router.push(`/clientes/${cliente.id}`)
-        }
-        activeOpacity={0.7}
-        style={
-          vencido ? { borderWidth: 2, borderColor: colores.naranja } : undefined
-        }
-      >
-        {libro?.portada ? (
-          <Portada source={libro.portada} resizeMode="cover" />
-        ) : (
-          <TapaGenerica>
-            <TituloTapa numberOfLines={4}>{titulo}</TituloTapa>
-          </TapaGenerica>
-        )}
+      <Latido activo={vencido}>
+        <Tarjeta
+          onPress={() => cliente && router.push(`/clientes/${cliente.id}`)}
+          activeOpacity={0.7}
+          style={
+            vencido
+              ? { borderWidth: 2, borderColor: colores.naranja }
+              : undefined
+          }
+        >
+          {libro?.portada ? (
+            <Portada source={libro.portada} resizeMode="cover" />
+          ) : (
+            <TapaGenerica>
+              <TituloTapa numberOfLines={4}>{titulo}</TituloTapa>
+            </TapaGenerica>
+          )}
 
-        <Datos>
-          <Titulo numberOfLines={2}>{titulo}</Titulo>
-          <Cliente numberOfLines={1}>{nombre}</Cliente>
+          <Datos>
+            <Titulo numberOfLines={2}>{titulo}</Titulo>
+            <Cliente numberOfLines={1}>{nombre}</Cliente>
 
-          <FilaInferior>
-            {enCursoItem ? (
-              <Etiqueta
-                style={{
-                  backgroundColor: vencido
-                    ? colores.naranjaClaro
-                    : colores.azulClaro,
-                }}
-              >
-                <TextoEtiqueta
+            <FilaInferior>
+              {enCursoItem ? (
+                <Etiqueta
                   style={{
-                    color: vencido ? colores.naranjaTexto : colores.azulTexto,
+                    backgroundColor: vencido
+                      ? colores.naranjaClaro
+                      : colores.azulClaro,
                   }}
                 >
-                  {textoVencimiento(item)}
-                </TextoEtiqueta>
-              </Etiqueta>
-            ) : (
-              <TextoDevuelto>
-                Devuelto el {formatearFecha(item.fechaDevolucion!)}
-              </TextoDevuelto>
-            )}
+                  <TextoEtiqueta
+                    style={{
+                      color: vencido ? colores.naranjaTexto : colores.azulTexto,
+                    }}
+                  >
+                    {textoVencimiento(item)}
+                  </TextoEtiqueta>
+                </Etiqueta>
+              ) : (
+                <TextoDevuelto>
+                  Devuelto el {formatearFecha(item.fechaDevolucion!)}
+                </TextoDevuelto>
+              )}
 
-            {enCursoItem && (
-              <BotonDevolver
-                onPress={() =>
-                  confirmarDevolucion(
-                    item,
-                    titulo,
-                    cliente?.nombre ?? "El cliente",
-                  )
-                }
-                style={
-                  vencido
-                    ? {
-                        backgroundColor: colores.tinta,
-                        borderColor: colores.tinta,
-                      }
-                    : undefined
-                }
-              >
-                <TextoDevolver
-                  style={vencido ? { color: "#FFFFFF" } : undefined}
+              {enCursoItem && (
+                <BotonDevolver
+                  onPress={() =>
+                    confirmarDevolucion(
+                      item,
+                      titulo,
+                      cliente?.nombre ?? "El cliente",
+                    )
+                  }
+                  style={
+                    vencido
+                      ? {
+                          backgroundColor: colores.tinta,
+                          borderColor: colores.tinta,
+                        }
+                      : undefined
+                  }
                 >
-                  Devolver
-                </TextoDevolver>
-              </BotonDevolver>
-            )}
-          </FilaInferior>
-        </Datos>
-      </Tarjeta>
+                  <TextoDevolver
+                    style={vencido ? { color: "#FFFFFF" } : undefined}
+                  >
+                    Devolver
+                  </TextoDevolver>
+                </BotonDevolver>
+              )}
+            </FilaInferior>
+          </Datos>
+        </Tarjeta>
+      </Latido>
     );
   }
 
@@ -247,7 +250,9 @@ export default function ListaAlquileres() {
         renderSectionHeader={({ section }) => (
           <EncabezadoSeccion>
             <TituloSeccion
-              style={section.alerta ? { color: colores.naranjaTexto } : undefined}
+              style={
+                section.alerta ? { color: colores.naranjaTexto } : undefined
+              }
             >
               {section.titulo}
             </TituloSeccion>
