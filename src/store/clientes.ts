@@ -1,4 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { estaEnCurso, useAlquileres } from "./alquileres";
 
 export interface Cliente {
@@ -24,49 +26,64 @@ interface ClientesStore {
   eliminarCliente: (id: string) => Resultado;
 }
 
-export const useClientes = create<ClientesStore>((set, get) => ({
-  clientes: [],
+// persist guarda los clientes en el celular y los recupera al abrir la app.
+export const useClientes = create<ClientesStore>()(
+  persist(
+    (set, get) => ({
+      clientes: [],
 
-  // ALTA
-  agregarCliente: (datos) => {
-    const dniRepetido = get().clientes.some((c) => c.dni === datos.dni);
-    if (dniRepetido) {
-      return { ok: false, error: "Ya hay un cliente registrado con ese DNI." };
-    }
-    const nuevo: Cliente = { ...datos, id: Date.now().toString() };
-    set((state) => ({ clientes: [...state.clientes, nuevo] }));
-    return { ok: true };
-  },
+      // ALTA
+      agregarCliente: (datos) => {
+        const dniRepetido = get().clientes.some((c) => c.dni === datos.dni);
+        if (dniRepetido) {
+          return {
+            ok: false,
+            error: "Ya hay un cliente registrado con ese DNI.",
+          };
+        }
+        const nuevo: Cliente = { ...datos, id: Date.now().toString() };
+        set((state) => ({ clientes: [...state.clientes, nuevo] }));
+        return { ok: true };
+      },
 
-  // MODIFICACIÓN
-  editarCliente: (id, datos) => {
-    // El DNI puede repetirse solo si es el del mismo cliente que estamos editando.
-    const dniRepetido = get().clientes.some(
-      (c) => c.dni === datos.dni && c.id !== id,
-    );
-    if (dniRepetido) {
-      return { ok: false, error: "Ya hay otro cliente con ese DNI." };
-    }
-    set((state) => ({
-      clientes: state.clientes.map((c) =>
-        c.id === id ? { ...c, ...datos } : c,
-      ),
-    }));
-    return { ok: true };
-  },
+      // MODIFICACIÓN
+      editarCliente: (id, datos) => {
+        // El DNI puede repetirse solo si es el del mismo cliente que estamos editando.
+        const dniRepetido = get().clientes.some(
+          (c) => c.dni === datos.dni && c.id !== id,
+        );
+        if (dniRepetido) {
+          return { ok: false, error: "Ya hay otro cliente con ese DNI." };
+        }
+        set((state) => ({
+          clientes: state.clientes.map((c) =>
+            c.id === id ? { ...c, ...datos } : c,
+          ),
+        }));
+        return { ok: true };
+      },
 
-  // BAJA
-  eliminarCliente: (id) => {
-    const tienePrestamos = useAlquileres
-      .getState()
-      .alquileres.some((a) => a.clienteId === id && estaEnCurso(a));
-    if (tienePrestamos) {
-      return {
-        ok: false,
-        error: "Tiene libros prestados. Primero registrá las devoluciones.",
-      };
-    }
-    set((state) => ({ clientes: state.clientes.filter((c) => c.id !== id) }));
-    return { ok: true };
-  },
-}));
+      // BAJA
+      eliminarCliente: (id) => {
+        const tienePrestamos = useAlquileres
+          .getState()
+          .alquileres.some((a) => a.clienteId === id && estaEnCurso(a));
+        if (tienePrestamos) {
+          return {
+            ok: false,
+            error: "Tiene libros prestados. Primero registrá las devoluciones.",
+          };
+        }
+        set((state) => ({
+          clientes: state.clientes.filter((c) => c.id !== id),
+        }));
+        return { ok: true };
+      },
+    }),
+    {
+      name: "biblioteca-clientes", // la "etiqueta" con la que se guarda en AsyncStorage
+      storage: createJSONStorage(() => AsyncStorage), // dónde se guarda
+      partialize: (state) => ({ clientes: state.clientes }), // qué se guarda: solo los datos
+    },
+  ),
+);

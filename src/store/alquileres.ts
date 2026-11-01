@@ -1,4 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { useLibros } from "./libros";
 
 export interface Alquiler {
@@ -62,53 +64,67 @@ interface AlquileresStore {
   devolverAlquiler: (id: string) => void;
 }
 
-export const useAlquileres = create<AlquileresStore>((set, get) => ({
-  alquileres: [],
+// persist guarda los alquileres en el celular y los recupera al abrir la app.
+export const useAlquileres = create<AlquileresStore>()(
+  persist(
+    (set, get) => ({
+      alquileres: [],
 
-  registrarAlquiler: (clienteId, libroId, plazo) => {
-    // Regla: el mismo cliente no puede tener dos copias del mismo libro a la vez.
-    const yaLoTiene = get().alquileres.some(
-      (a) =>
-        a.clienteId === clienteId && a.libroId === libroId && estaEnCurso(a),
-    );
-    if (yaLoTiene) {
-      return {
-        ok: false,
-        error: "Este cliente ya tiene una copia de este libro.",
-      };
-    }
+      registrarAlquiler: (clienteId, libroId, plazo) => {
+        // Regla: el mismo cliente no puede tener dos copias del mismo libro a la vez.
+        const yaLoTiene = get().alquileres.some(
+          (a) =>
+            a.clienteId === clienteId &&
+            a.libroId === libroId &&
+            estaEnCurso(a),
+        );
+        if (yaLoTiene) {
+          return {
+            ok: false,
+            error: "Este cliente ya tiene una copia de este libro.",
+          };
+        }
 
-    // Le pedimos al store de libros que descuente una copia.
-    // Si no quedan copias, devuelve el error y no registramos nada.
-    const resultado = useLibros.getState().prestarLibro(libroId);
-    if (!resultado.ok) return resultado;
+        // Le pedimos al store de libros que descuente una copia.
+        // Si no quedan copias, devuelve el error y no registramos nada.
+        const resultado = useLibros.getState().prestarLibro(libroId);
+        if (!resultado.ok) return resultado;
 
-    const hoy = new Date();
-    const vencimiento = new Date(hoy);
-    vencimiento.setDate(hoy.getDate() + plazo);
+        const hoy = new Date();
+        const vencimiento = new Date(hoy);
+        vencimiento.setDate(hoy.getDate() + plazo);
 
-    const nuevo: Alquiler = {
-      id: Date.now().toString(),
-      clienteId,
-      libroId,
-      fechaPrestamo: hoy.toISOString(),
-      fechaVencimiento: vencimiento.toISOString(),
-      fechaDevolucion: null,
-    };
-    set((state) => ({ alquileres: [nuevo, ...state.alquileres] }));
-    return { ok: true };
-  },
+        const nuevo: Alquiler = {
+          id: Date.now().toString(),
+          clienteId,
+          libroId,
+          fechaPrestamo: hoy.toISOString(),
+          fechaVencimiento: vencimiento.toISOString(),
+          fechaDevolucion: null,
+        };
+        set((state) => ({ alquileres: [nuevo, ...state.alquileres] }));
+        return { ok: true };
+      },
 
-  devolverAlquiler: (id) => {
-    const alquiler = get().alquileres.find((a) => a.id === id);
-    if (!alquiler || !estaEnCurso(alquiler)) return; // ya estaba devuelto
+      devolverAlquiler: (id) => {
+        const alquiler = get().alquileres.find((a) => a.id === id);
+        if (!alquiler || !estaEnCurso(alquiler)) return; // ya estaba devuelto
 
-    set((state) => ({
-      alquileres: state.alquileres.map((a) =>
-        a.id === id ? { ...a, fechaDevolucion: new Date().toISOString() } : a,
-      ),
-    }));
-    // La copia vuelve a estar disponible.
-    useLibros.getState().devolverLibro(alquiler.libroId);
-  },
-}));
+        set((state) => ({
+          alquileres: state.alquileres.map((a) =>
+            a.id === id
+              ? { ...a, fechaDevolucion: new Date().toISOString() }
+              : a,
+          ),
+        }));
+        // La copia vuelve a estar disponible.
+        useLibros.getState().devolverLibro(alquiler.libroId);
+      },
+    }),
+    {
+      name: "biblioteca-alquileres", // la "etiqueta" con la que se guarda en AsyncStorage
+      storage: createJSONStorage(() => AsyncStorage), // dónde se guarda
+      partialize: (state) => ({ alquileres: state.alquileres }), // qué se guarda: solo los datos
+    },
+  ),
+);
