@@ -24,6 +24,8 @@ export default function ListaClientes() {
     const iniciales =
       `${item.nombre[0] ?? ""}${item.apellido[0] ?? ""}`.toUpperCase();
     return (
+      // TouchableHighlight: al tocar, la fila se "ilumina" con underlayColor
+      // (en vez de volverse transparente como TouchableOpacity).
       <Fila
         onPress={() =>
           router.push({
@@ -31,22 +33,29 @@ export default function ListaClientes() {
             params: { id: item.id },
           })
         }
-        activeOpacity={0.6}
+        underlayColor={colores.azulClaro} // el color que aparece al presionar
       >
-        {item.foto ? (
-          <Foto source={{ uri: item.foto }} />
-        ) : (
-          <Avatar>
-            <Iniciales>{iniciales}</Iniciales>
-          </Avatar>
-        )}
-        <Datos>
-          <Nombre>
-            {item.nombre} {item.apellido}
-          </Nombre>
-          <Dni>DNI {item.dni}</Dni>
-        </Datos>
-        <Ionicons name="chevron-forward" size={18} color={colores.tintaSuave} />
+        {/* TouchableHighlight acepta UN SOLO hijo: por eso todo va dentro de ContenidoFila */}
+        <ContenidoFila>
+          {item.foto ? (
+            <Foto source={{ uri: item.foto }} />
+          ) : (
+            <Avatar>
+              <Iniciales>{iniciales}</Iniciales>
+            </Avatar>
+          )}
+          <Datos>
+            <Nombre>
+              {item.nombre} {item.apellido}
+            </Nombre>
+            <Dni>DNI {item.dni}</Dni>
+          </Datos>
+          <Ionicons
+            name="chevron-forward"
+            size={18}
+            color={colores.tintaSuave}
+          />
+        </ContenidoFila>
       </Fila>
     );
   }
@@ -107,6 +116,7 @@ export default function ListaClientes() {
             marginHorizontal: 20,
             borderRadius: 16,
             backgroundColor: colores.superficie,
+            overflow: "hidden", // que el color al presionar respete las esquinas redondeadas
           }}
           keyboardShouldPersistTaps="handled"
         />
@@ -188,7 +198,14 @@ const InputBuscador = styled.TextInput`
   color: ${({ theme }) => theme.colores.tinta};
 `;
 
-const Fila = styled.TouchableOpacity`
+// La fila tocable. Necesita un color de fondo propio: es el que se ve
+// cuando NO se está presionando (al presionar se ve el underlayColor).
+const Fila = styled.TouchableHighlight`
+  background-color: ${({ theme }) => theme.colores.superficie};
+`;
+
+// El único hijo de la fila: acá va el diseño (en fila, con espacio entre las cosas).
+const ContenidoFila = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 12px;
